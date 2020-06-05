@@ -6,7 +6,7 @@ from libs.auth import login_required, jwt_login
 from libs.date_helper import getCurrentTime
 from libs.return_data_helper import ops_renderErrJSON, ops_renderJSON
 from libs.wtf_helper import Register, Login
-from models.user import User, Article, Draft
+from models.user import User, Article, Draft, Comment
 
 api = Blueprint("api", __name__)
 
@@ -183,3 +183,44 @@ def manage_draft():
         else:
             return "删除成功~~"
 
+@api.route('/manage_comment',methods=["POST"],endpoint='manage_comment')
+@login_required
+def manage_comment():
+    """
+    :param
+    type: 操作类型
+    add:
+        article_id: 对应文章id
+        content: 评论内容
+        nickname: 评论者昵称
+    delete:
+        id: 自身id
+        article_id: 对应文章id
+    :return:
+    最终客户端接收的数据格式：
+            成功：{ "code":200,"msg":"xx成功~~","data":{} }
+            失败：{ “code” = -1,msg = str(error),data = {} }
+    """
+    form = request.form
+    if form['type'] == 'add':
+        try:
+            model_comment,model_article = Comment.add_comment(form)
+            db.session.add(model_comment)
+            # 对article表中的comment_times字段进行改变
+            db.session.add(model_article)
+            db.session.commit()
+        except Exception as error:
+            return -1, str(error)
+        else:
+            return "添加成功~~"
+    if form['type'] == 'delete':
+        try:
+            model_comment,model_article = Comment.delete_comment(form)
+            db.session.delete(model_comment)
+            # 对article表中的comment_times字段进行改变
+            db.session.add(model_article)
+            db.session.commit()
+        except Exception as error:
+            return -1, str(error)
+        else:
+            return "删除成功~~"
