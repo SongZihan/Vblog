@@ -5,7 +5,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    data: []
+    data: [],
+    is_login: false
   },
   mutations: {
     set_data (state, value) {
