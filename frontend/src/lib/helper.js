@@ -1,7 +1,7 @@
 import router from '../router/index'
 
 function to_registered () {
-  router.push('Registered')
+  router.push('/Registered')
 }
 
 export {

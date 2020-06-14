@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Index from '../pages/Index'
 import Login from '../pages/Login'
 import Registered from '../pages/Registered'
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,10 @@ const routes = [
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push (location) {
   return originalPush.call(this, location).catch(err => err)
+}
+// 页面刷新时，重新赋值token
+if (sessionStorage.getItem('token')) {
+  store.commit('set_token', sessionStorage.getItem('token'))
 }
 
 const router = new VueRouter({

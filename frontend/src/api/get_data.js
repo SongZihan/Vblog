@@ -1,14 +1,14 @@
-function firstGetData () {
-  const axios = require('axios')
+function firstGetData (self) {
+  // const axios = require('axios')
   // 注意设置代理
-  return axios.get('/api/first_get').then(
+  self.$axios.get('/get_data/homepage').then(
     function (res) {
-      return res.data
+      // 将文章数据存入vuex
+      self.$store.commit('set_data', res.data.data)
     }
   ).catch(
     function (err) {
-      console.log('error during get data!')
-      return err
+      console.log(err)
     }
   )
 }

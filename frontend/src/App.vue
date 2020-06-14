@@ -34,9 +34,10 @@ export default {
   },
   created () {
     // 调用api函数，返回接收的数据
-    const data = firstGetData()
+    firstGetData(this)
     // 数据存储到Vuex中
-    this.$store.commit('set_data', data)
+    // this.$store.commit('set_data', data)
+    // console.log(data)
   }
 }
 </script>

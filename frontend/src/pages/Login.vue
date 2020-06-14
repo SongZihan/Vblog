@@ -2,11 +2,11 @@
 
   <div>
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="ID" prop="ID">
-        <el-input  v-model="ruleForm.ID" autocomplete="off"></el-input>
+      <el-form-item label="ID" prop="username">
+        <el-input  v-model="ruleForm.username" autocomplete="on"></el-input>
       </el-form-item>
-      <el-form-item label="密码" type="password" prop="pass">
-        <el-input v-model.number="ruleForm.pass"></el-input>
+      <el-form-item label="密码" type="password" prop="password">
+        <el-input v-model.number="ruleForm.password"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
@@ -18,7 +18,6 @@
 </template>
 
 <script>
-// import to_registered from '../lib/helper'
 export default {
   name: 'Login',
   data () {
@@ -26,29 +25,28 @@ export default {
     var checkID = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('ID不能为空'))
+      } else {
+        callback()
       }
-      setTimeout(() => {
-        if (value.length < 5 || value.length > 20) {
-          callback(new Error('请输入正确的ID'))
-        }
-      }, 1000)
     }
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'))
+      } else {
+        callback()
       }
     }
 
     return {
       ruleForm: {
-        ID: '',
-        pass: ''
+        username: '',
+        password: ''
       },
       rules: {
-        pass: [
+        password: [
           { validator: validatePass, trigger: 'blur' }
         ],
-        ID: [
+        username: [
           { validator: checkID, trigger: 'blur' }
         ]
       }
@@ -60,6 +58,39 @@ export default {
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
+    },
+    submitForm (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // 转换为字符串
+          this.ruleForm.password += ''
+          this.ruleForm.username += ''
+          // 发起post请求
+          this.$axios({
+            method: 'post',
+            url: '/api/login',
+            data: this.ruleForm
+          }).then((res) => {
+            if (res.data.code === 200) {
+              // 设置token到全局存储
+              const token = res.data.data
+              this.$store.commit('set_token', token)
+              // 登录完成返回主页
+              this.$router.push('/')
+              // 登录完成设置登出
+            } else {
+              console.log(res.data.data)
+            }
+          }).catch(
+            function (err) {
+              console.log(err)
+            }
+          )
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
   }
 }

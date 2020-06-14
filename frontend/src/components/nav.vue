@@ -14,10 +14,6 @@
         <i class="el-icon-menu"></i>
         <span slot="title">{{item.title}}</span>
       </el-menu-item>
-      <el-menu-item index="2">
-        <i class="el-icon-menu"></i>
-        <span slot="title">导航二</span>
-      </el-menu-item>
     </el-menu>
   </el-col>
   </el-row>
@@ -26,7 +22,7 @@
 <script>
 export default {
   name: 'nav',
-  data: function () {
+  data () {
     return {
       items: this.$store.state.data
     }
