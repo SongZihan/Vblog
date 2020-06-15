@@ -10,10 +10,13 @@
         <h3>QQ:2403353662</h3>
         <h3>Email:s2403353662@gmail.com</h3>
       </el-col>
-      <el-col :span="6" :offset="9">
+      <el-col :span="3" :offset="5">
         <slot>
 <!--           <el-button type="primary">主要按钮</el-button>-->
         </slot>
+      </el-col>
+      <el-col v-if="this.$store.state.is_login" :span="2" :offset="2">
+        <el-button type="success" @click="to_write" plain>创建文章</el-button>
       </el-col>
     </el-row>
   </div>
@@ -25,6 +28,11 @@ export default {
   name: 'my_header',
   data: function () {
     return {}
+  },
+  methods: {
+    to_write () {
+      this.$router.push('/Write')
+    }
   }
 }
 </script>

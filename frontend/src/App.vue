@@ -32,7 +32,7 @@ export default {
     'my-nav': nav,
     'my-login_logout_registerd': login_logout_registerd
   },
-  created () {
+  beforeCreate () {
     // 调用api函数，返回接收的数据
     firstGetData(this)
     // 数据存储到Vuex中

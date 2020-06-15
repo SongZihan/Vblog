@@ -26,8 +26,21 @@ Vue.prototype.$axios = axios
 // lodash
 Vue.prototype._ = _
 
-new Vue({
+var vm = new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app')
+
+// 全局响应拦截器
+axios.interceptors.response.use(function (response) {
+  // Any status code that lie within the range of 2xx cause this function to trigger
+  // Do something with response data
+  if (response.data.code === -1) {
+    vm.$notify.error({
+      title: '错误',
+      message: response.data.msg
+    })
+  }
+  return response
+})

@@ -14,7 +14,7 @@ export default new Vuex.Store({
       // 整理数据格式 [['分类名',obj,obj],['分类名',obj]...]
       var _ = require('lodash')
       const classify = _.uniqBy(value, value => value[2])
-      console.log('classify is', classify)
+      // console.log('classify is', classify)
       var result = []
       for (var i in classify) {
         // 创建一个大分类

@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Index from '../pages/Index'
 import Login from '../pages/Login'
+import Title from '../pages/Title'
+import Article from '../pages/Article'
+import Write from '../pages/Write'
 import Registered from '../pages/Registered'
 import store from '../store'
 
@@ -22,6 +25,21 @@ const routes = [
     path: '/Registered',
     name: 'Registered',
     component: Registered
+  },
+  {
+    path: '/classify/:num',
+    name: 'classify',
+    component: Title
+  },
+  {
+    path: '/article',
+    name: 'article',
+    component: Article
+  },
+  {
+    path: '/Write',
+    name: 'Write',
+    component: Write
   }
 ]
 // 解决路由重复push报错 https://blog.csdn.net/xiecheng1995/article/details/106497172/

@@ -12,7 +12,19 @@ function firstGetData (self) {
     }
   )
 }
+function get_one_page (self, article_id) {
+  self.$axios({
+    method: 'get',
+    url: '/get_data/get_one_page',
+    params: { id: article_id }
+  }).then(function (res) {
+    self.$router.push({
+      name: 'article',
+      params: { data: res.data }
+    })
+  })
+}
 
 export {
-  firstGetData
+  firstGetData, get_one_page
 }
