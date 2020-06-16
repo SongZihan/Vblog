@@ -19,9 +19,9 @@ Vue.config.productionTip = false
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 // 全局超时时间
 axios.defaults.timeout = 10000
+// 刷新页面时应该自动去sessionStorage中寻找token
+axios.defaults.headers.common.Authorization = sessionStorage.token
 
-// 全局token
-axios.defaults.headers.common.Authentication = store.state.token
 Vue.prototype.$axios = axios
 // lodash
 Vue.prototype._ = _
@@ -39,7 +39,7 @@ axios.interceptors.response.use(function (response) {
   if (response.data.code === -1) {
     vm.$notify.error({
       title: '错误',
-      message: response.data.msg
+      message: response.data.msg + '||' + response.data.data
     })
   }
   return response

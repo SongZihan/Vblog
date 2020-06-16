@@ -13,6 +13,7 @@ api = Blueprint("api", __name__)
 
 @api.route('/login',methods=["POST"])
 def login():
+    print(request.form)
     form = Login()
     if form.validate():
         user = User.query.filter_by(login_name=form.username.data).first()
@@ -77,7 +78,8 @@ def add_article():
             失败：{ “code” = -1,msg = str(error),data = {} }
     """
     # 将用户信息注册进数据库
-    form = request.form
+    form = request.get_json(silent=True)
+    print(form)
     model_article = Article.add_article(form)
     try:
         db.session.add(model_article)
@@ -102,7 +104,7 @@ def modify_article():
             成功：{ "code":200,"msg":"修改成功~~","data":{} }
             失败：{ “code” = -1,msg = str(error),data = {} }
     """
-    form = request.form
+    form = request.get_json(silent=True)
     try:
         model_article = Article.modify_article(form)
         db.session.add(model_article)
@@ -124,7 +126,7 @@ def delete_article():
             成功：{ "code":200,"msg":"删除成功~~","data":{} }
             失败：{ “code” = -1,msg = str(error),data = {} }
     """
-    form = request.form
+    form = request.get_json(silent=True)
     try:
         model_article = Article.delete_article(form)
         db.session.delete(model_article)
@@ -154,7 +156,7 @@ def manage_draft():
             成功：{ "code":200,"msg":"xx成功~~","data":{} }
             失败：{ “code” = -1,msg = str(error),data = {} }
     """
-    form = request.form
+    form = request.get_json(silent=True)
     if form['type'] == 'add':
         try:
             model_draft = Draft.add_draft(form)
@@ -201,7 +203,7 @@ def manage_comment():
             成功：{ "code":200,"msg":"xx成功~~","data":{} }
             失败：{ “code” = -1,msg = str(error),data = {} }
     """
-    form = request.form
+    form = request.get_json(silent=True)
     if form['type'] == 'add':
         try:
             model_comment,model_article = Comment.add_comment(form)
