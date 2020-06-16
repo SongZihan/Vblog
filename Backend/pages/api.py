@@ -87,7 +87,8 @@ def add_article():
     except Exception as error:
         return -1,str(error)
     else:
-        return "添加成功~~"
+        # 添加成功返回文章id
+        return 201,"添加成功~~",Article.query.filter_by(title=form['title']).first().id
 
 @api.route('/modify_article',methods=["POST"],endpoint='modify_article')
 @login_required
@@ -112,7 +113,7 @@ def modify_article():
     except Exception as error:
         return -1, str(error)
     else:
-        return "修改成功~~"
+        return 201,"修改成功~~",Article.query.filter_by(title=form['title']).first().id
 
 @api.route('/delete_article',methods=["POST"],endpoint='delete_article')
 @login_required
@@ -143,39 +144,55 @@ def manage_draft():
     :param
     type: 操作类型
     add:
-        title: 文章标题
+    创建文章：
+        title: 文章标题 不可为空
         content: 文章内容
-    modify:
-        title: 原标题
-        modified_title： 修改后的标题
+    修改文章:
+        id: 文章id
+        title： 修改后的标题
         content: 文章内容
     delete:
-        title: 文章标题
+        id: 文章id
     :return:
     最终客户端接收的数据格式：
             成功：{ "code":200,"msg":"xx成功~~","data":{} }
             失败：{ “code” = -1,msg = str(error),data = {} }
+            add模式会在data中返回文章id：
+              "code": 200,
+              "data": 5,
+              "msg": "添加成功~~"
     """
     form = request.get_json(silent=True)
     if form['type'] == 'add':
+        # 判断有无id字段
         try:
-            model_draft = Draft.add_draft(form)
-            db.session.add(model_draft)
-            db.session.commit()
-        except Exception as error:
-            return -1, str(error)
+            form['id']
+        except KeyError as err:
+            # 没有则执行创建程序
+            try:
+                model_draft = Draft.add_draft(form)
+                db.session.add(model_draft)
+                db.session.commit()
+            except Exception as error:
+                return -1, str(error)
+            else:
+                # 返回id数据
+                this_article_id = Draft.query.filter_by(title=form['title']).first().id
+                return 201,"添加成功~~",this_article_id
         else:
-            return "添加成功~~"
-    elif form['type'] == 'modify':
-        try:
-            model_draft = Draft.modify_draft(form)
-            db.session.add(model_draft)
-            db.session.commit()
-        except Exception as error:
-            return -1, str(error)
-        else:
-            return "修改成功~~"
+            # 有则执行修改程序
+            try:
+                model_draft = Draft.modify_draft(form)
+                db.session.add(model_draft)
+                db.session.commit()
+            except Exception as error:
+                return -1, str(error)
+            else:
+                # 返回id数据
+                this_article_id = Draft.query.filter_by(title=form['title']).first().id
+                return 201, "修改成功~~", this_article_id
     else:
+        # 否则执行删除程序
         try:
             model_draft = Draft.delete_draft(form)
             db.session.delete(model_draft)

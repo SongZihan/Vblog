@@ -121,14 +121,14 @@ class Draft(db.Model):
 
     @staticmethod
     def modify_draft(form):
-        model_draft = Draft.query.filter_by(title=form['title']).first()
+        model_draft = Draft.query.filter_by(id=form['id']).first()
         model_draft.content = form['content']
-        model_draft.title = form['modified_title']
+        model_draft.title = form['title']
         return model_draft
 
     @staticmethod
     def delete_draft(form):
-        model_draft = Draft.query.filter_by(title=form['title']).first()
+        model_draft = Draft.query.filter_by(id=form['id']).first()
         return model_draft
 
 

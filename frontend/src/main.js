@@ -41,6 +41,12 @@ axios.interceptors.response.use(function (response) {
       title: '错误',
       message: response.data.msg + '||' + response.data.data
     })
+  } else if (response.data.code === 200) {
+    vm.$notify({
+      title: '成功',
+      message: response.data.msg,
+      type: 'success'
+    })
   }
   return response
 })

@@ -44,14 +44,57 @@ export default {
         article_type: '',
         content: ''
       },
-      input_class: ''
+      input_class: '',
+      id: ''
+    }
+  },
+  // 循环保存
+  mounted () {
+    // 只有当标题被写入才会开始自动保存
+    if (this.submit_form.title !== '') {
+      this.timer = setInterval(this.save, 60000)
     }
   },
   methods: {
-    // 尝试save事件
+    // 提交草稿
     save (md, html) {
-      console.log(this.value)
-      // console.log(this.title)
+      if (this.submit_form.title === '') {
+        this.$notify.error({
+          title: '错误',
+          message: '请输入标题'
+        })
+      } else {
+        // 判断有无id，这是区分第一次保存和多次保存的依据
+        if (this.id === '') {
+          // 没有id则表示是第一次保存
+          this.$axios({
+            method: 'post',
+            url: '/api/manage_draft',
+            data: {
+              title: this.submit_form.title,
+              content: this.submit_form.content,
+              type: 'add'
+            }
+          }).then((res) => {
+            // 接收返回的id保存到this.id
+            if (res.data.code === 200) {
+              this.id = res.data.data
+              console.log(this.id)
+            }
+          })
+        } else {
+          this.$axios({
+            method: 'post',
+            url: '/api/manage_draft',
+            data: {
+              title: this.submit_form.title,
+              content: this.submit_form.content,
+              id: this.id,
+              type: 'add'
+            }
+          })
+        }
+      }
     },
     // 提交文章
     submit_article () {
@@ -75,15 +118,17 @@ export default {
           method: 'post',
           url: '/api/add_article',
           data: this.submit_form
-        }).then(function (res) {
-          if (res.data.code === 200) {
-            this.$notify({
-              title: '成功',
-              message: res.data.msg,
-              type: 'success'
-            })
-          }
         })
+        //   .then((res) => {
+        //   // 请求成功返回成功信息
+        //   if (res.data.code === 200) {
+        //     this.$notify({
+        //       title: '成功',
+        //       message: res.data.msg,
+        //       type: 'success'
+        //     })
+        //   }
+        // })
       }
     }
   }

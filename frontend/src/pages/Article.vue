@@ -5,7 +5,7 @@
     </el-row>
     <el-row>
       <el-col>
-        <vue-markdown>{{content}}</vue-markdown>
+        <mavon-editor v-model="content" v-bind="option"/>
       </el-col>
     </el-row>
     <el-divider></el-divider>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown'
+// import VueMarkdown from 'vue-markdown'
 
 export default {
   name: 'Article',
@@ -41,15 +41,17 @@ export default {
       title: this.$route.params.data.data[0][1],
       content: this.$route.params.data.data[0][2],
       update_time: this.$route.params.data.data[0][4],
-      comment: this.$route.params.data.data[1]
+      comment: this.$route.params.data.data[1],
+      option: {
+        toolbarsFlag: false, subfield: false, defaultOpen: 'preview'
+      }
     }
-  },
-  components: {
-    VueMarkdown
   }
+  // components: {
+  //   VueMarkdown
+  // }
 }
 </script>
 
-<style scoped>
-
+<style>
 </style>

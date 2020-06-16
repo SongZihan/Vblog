@@ -78,12 +78,6 @@ export default {
               this.$store.commit('set_token', token)
               // 实时更新token到全局请求头中 header['Authorization']
               this.$axios.defaults.headers.common.Authorization = token
-              // 输出成功信息
-              this.$notify({
-                title: '登录成功',
-                message: token,
-                type: 'success'
-              })
               // 登录完成返回主页
               this.$router.push('/')
               // 登录完成设置登出

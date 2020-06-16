@@ -44,9 +44,13 @@ def login_required(func):
             elif not decode_token['is_valid']:
                 return ops_renderErrJSON(msg='you need login~')
             else:
+                # msg为视图函数return的参数
                 msg = func(*args, **kw)
                 if msg[0] == -1:
                     return ops_renderErrJSON(msg=msg[1])
+                elif msg[0] == 201:
+                    # 视图函数返回201代表有第三个参数需要传递
+                    return ops_renderJSON(msg=msg[1],data=msg[2])
                 else:
                     return ops_renderJSON(msg=msg)
 
