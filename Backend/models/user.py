@@ -49,7 +49,9 @@ class Article(db.Model):
     def delete_article(form):
         # 删除文章
         model_article = Article.query.filter_by(title=form['title']).first()
-        return model_article
+        # 删除文章对应的评论
+        model_comment = Comment.query.filter_by(id=model_article.id).all()
+        return model_article,model_comment
     @staticmethod
     def get_homepage():
         # 首页加载,[(1, '## 测试用内容 修改过了', '修改后的标题'), (2, '## 测试用内容111', '再次测试')]
@@ -130,6 +132,11 @@ class Draft(db.Model):
     def delete_draft(form):
         model_draft = Draft.query.filter_by(id=form['id']).first()
         return model_draft
+
+    @staticmethod
+    def get_draft():
+        # [(1, '你好啊', ''), (2, 'ppp', '你的名字是？'), (3, '不可为空ma?', '可为空66666'), (5, '第二次创建', '可为空66666'), (6, 'xin的文章', 'xixihaha'), (7, '测试用草稿6', '')]
+        return Draft.query.with_entities(Draft.id,Draft.title,Draft.content).all()
 
 
 class Comment(db.Model):

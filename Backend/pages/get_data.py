@@ -66,3 +66,15 @@ def get_one_page():
         return ops_renderErrJSON(msg=str(error))
     else:
         return ops_renderJSON(data=data)
+
+@get_data.route('/get_draft',methods=["GET"])
+def get_draft():
+    """
+    响应页面数据加载请求
+    :return:
+    数据类型：列表
+    [(1, '你好啊', ''), (2, 'ppp', '你的名字是？'), (3, '不可为空ma?', '可为空66666'), (5, '第二次创建', '可为空66666'), (6, 'xin的文章', 'xixihaha'), (7, '测试用草稿6', '')]
+    """
+    data = Draft.get_draft()
+
+    return ops_renderJSON(data=data)

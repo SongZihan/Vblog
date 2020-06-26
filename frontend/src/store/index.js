@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     data: [],
     is_login: false,
-    token: ''
+    token: '',
+    draft_data: ''
   },
   mutations: {
     set_data (state, value) {
@@ -29,6 +30,9 @@ export default new Vuex.Store({
       }
       // console.log(result)
       state.data = result
+    },
+    set_draft_data (state, data) {
+      state.draft_data = data
     },
 
     set_token (state, token) {

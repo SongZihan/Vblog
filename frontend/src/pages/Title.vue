@@ -9,7 +9,7 @@
 <!--            <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
           </div>
           <div class="text item">
-            {{'更新时间 ' + i[3]}}--{{'阅读数' + i[4]}}--{{'评论数' + i[5]}}
+            {{'更新时间 ' + i[3]}}--{{'评论数' + i[4]}}--{{'阅读数' + i[5]}}
           </div>
         </el-card>
           </div>

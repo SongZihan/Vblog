@@ -23,7 +23,7 @@
 import my_header from './components/my_header'
 import nav from './components/nav'
 import login_logout_registerd from './components/login_button'
-import { firstGetData } from './api/get_data.js'
+import { firstGetData, get_draft } from './api/get_data.js'
 
 export default {
   name: 'app',
@@ -33,11 +33,9 @@ export default {
     'my-login_logout_registerd': login_logout_registerd
   },
   beforeCreate () {
-    // 调用api函数，返回接收的数据
+    // 调用api函数，返回接收的数据存储在vuex中
     firstGetData(this)
-    // 数据存储到Vuex中
-    // this.$store.commit('set_data', data)
-    // console.log(data)
+    get_draft(this)
   }
 }
 </script>

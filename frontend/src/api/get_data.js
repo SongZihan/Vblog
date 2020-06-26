@@ -24,7 +24,16 @@ function get_one_page (self, article_id) {
     })
   })
 }
+function get_draft (self) {
+  self.$axios({
+    method: 'get',
+    url: '/get_data/get_draft'
+  }).then(function (res) {
+    // 将文章数据存入vuex
+    self.$store.commit('set_draft_data', res.data.data)
+  })
+}
 
 export {
-  firstGetData, get_one_page
+  firstGetData, get_one_page, get_draft
 }

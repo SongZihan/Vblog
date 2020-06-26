@@ -7,6 +7,7 @@ import Article from '../pages/Article'
 import Write from '../pages/Write'
 import Registered from '../pages/Registered'
 import store from '../store'
+import Draft_display from '../pages/Draft_display'
 
 Vue.use(VueRouter)
 
@@ -40,6 +41,11 @@ const routes = [
     path: '/Write',
     name: 'Write',
     component: Write
+  },
+  {
+    path: '/Draft_display',
+    name: 'Draft_display',
+    component: Draft_display
   }
 ]
 // 解决路由重复push报错 https://blog.csdn.net/xiecheng1995/article/details/106497172/

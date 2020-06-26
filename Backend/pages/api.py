@@ -1,5 +1,7 @@
 from flask import Blueprint, request
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import exc
 
 from application import db
 from libs.auth import login_required, jwt_login
@@ -129,8 +131,11 @@ def delete_article():
     """
     form = request.get_json(silent=True)
     try:
-        model_article = Article.delete_article(form)
+        model_article,model_comment = Article.delete_article(form)
         db.session.delete(model_article)
+        # 不能直接删除，会报Class ‘__builtin__.list’ is not mapped错误
+        for i in model_comment:
+            db.session.delete(i)
         db.session.commit()
     except Exception as error:
         return -1, str(error)

@@ -17,6 +17,10 @@
           <i class="el-icon-menu"></i>
           <span slot="title">{{item[0]}}</span>
         </el-menu-item>
+      <el-menu-item @click="to_draft">
+        <i class="el-icon-notebook-1"></i>
+        <span slot="title">草稿箱</span>
+      </el-menu-item>
       </el-menu>
     </el-col>
   </el-row>
@@ -35,6 +39,9 @@ export default {
     to_path (index) {
       console.log('=====')
       this.$router.push('/classify/' + index + '')
+    },
+    to_draft () {
+      this.$router.push('/Draft_display')
     }
   }
 }

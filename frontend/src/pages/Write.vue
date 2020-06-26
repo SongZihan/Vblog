@@ -45,14 +45,40 @@ export default {
         content: ''
       },
       input_class: '',
-      id: ''
+      id: '',
+      time: ''
     }
   },
   // 循环保存
   mounted () {
-    // 只有当标题被写入才会开始自动保存
-    if (this.submit_form.title !== '') {
-      this.timer = setInterval(this.save, 60000)
+    // 每隔60s自动存储草稿
+    this.time = setInterval(this.save, 6000)
+
+    // 检测路由传参
+    console.log('====', this.$route.params)
+    if (this.$route.params !== '' && this.$route.params.data) {
+      this.submit_form.title = this.$route.params.data[1]
+      this.submit_form.content = this.$route.params.data[2]
+      this.id = this.$route.params.data[0]
+    } else if (this.$route.params.title) {
+      var find_title = false
+      // 到draft_data中寻找重名的文章，如果有则获取那个文章的数据
+      for (var i in this.$store.state.draft_data) {
+        console.log(this.$store.state.draft_data[i])
+        if (this.$store.state.draft_data[i][1] === this.$route.params.title) {
+          this.submit_form.title = this.$store.state.draft_data[i][1]
+          this.submit_form.content = this.$store.state.draft_data[i][2]
+          this.id = this.$store.state.draft_data[i][0]
+          find_title = true
+          break
+        }
+      }
+      // 如果未找到重名则执行第一次创建草稿程序
+      if (find_title !== true) {
+        this.submit_form.title = this.$route.params.title
+        this.submit_form.content = this.$route.params.content
+        this.submit_form.article_type = this.$route.params.article_type
+      }
     }
   },
   methods: {
@@ -131,7 +157,12 @@ export default {
         // })
       }
     }
+  },
+  beforeDestroy () {
+    // 删除定时器
+    clearInterval(this.time)
   }
+
 }
 
 </script>
